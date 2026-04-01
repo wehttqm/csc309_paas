@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
         const err = await res.json();
         return err.message;
       }
-      console.log(user);
     }
     if (key) get_user();
     else setUser(null);
@@ -72,6 +71,16 @@ export const AuthProvider = ({ children }) => {
     if (res.status === 200) {
       const data = await res.json();
       localStorage.setItem("token", data.token);
+
+      const userRes = await fetch(BACKEND_URL + "/user/me", {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      });
+
+      const userData = await userRes.json();
+      setUser(userData.user);
+
       navigate("/profile");
     } else {
       const err = await res.json();
