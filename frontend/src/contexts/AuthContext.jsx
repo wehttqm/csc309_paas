@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
         const usr = await res.json();
         setUser(usr.user);
       } else {
+        localStorage.removeItem("token");
+        setUser(null);
         const err = await res.json();
         return err.message;
       }
@@ -70,19 +72,26 @@ export const AuthProvider = ({ children }) => {
     });
     if (res.status === 200) {
       const data = await res.json();
-      localStorage.setItem("token", data.token);
 
-      const userRes = await fetch(BACKEND_URL + "/user/me", {
+      const res = await fetch(BACKEND_URL + "/user/me", {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
       });
-
-      const userData = await userRes.json();
-      setUser(userData.user);
+      if (res.status === 200) {
+        const usr = await res.json();
+        localStorage.setItem("token", data.token);
+        setUser(usr.user);
+      } else {
+        localStorage.removeItem("token");
+        setUser(null);
+        const err = await res.json();
+        return err.message;
+      }
 
       navigate("/profile");
     } else {
+      setUser(null);
       const err = await res.json();
       return err.message;
     }
@@ -109,6 +118,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/success");
     } else {
       const err = await res.json();
+      setUser(null);
       return err.message;
     }
   };
