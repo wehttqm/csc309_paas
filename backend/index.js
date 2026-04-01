@@ -9,7 +9,7 @@ const corsOptions = {
   origin: FRONTEND_URL,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use("", routes);
 
