@@ -29,9 +29,13 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         const usr = await res.json();
         setUser(usr);
+      } else {
+        const err = await res.json();
+        return err.message;
       }
     }
     if (key) get_user();
+    else setUser(null);
   }, []);
 
   /*
@@ -68,6 +72,9 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       navigate("/profile");
+    } else {
+      const err = await res.json();
+      return err.message;
     }
   };
 
@@ -90,6 +97,9 @@ export const AuthProvider = ({ children }) => {
     });
     if (res.status === 201) {
       navigate("/success");
+    } else {
+      const err = await res.json();
+      return err.message;
     }
   };
 
