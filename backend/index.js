@@ -5,7 +5,10 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: "https://frontend-production-929f.up.railway.app",
+  origin: [
+    "https://frontend-production-929f.up.railway.app",
+    "http://localhost:5173",
+  ],
 };
 
 app.use(cors(corsOptions));

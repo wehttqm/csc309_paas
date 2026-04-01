@@ -28,11 +28,12 @@ export const AuthProvider = ({ children }) => {
       });
       if (res.status === 200) {
         const usr = await res.json();
-        setUser(usr);
+        setUser(usr.user);
       } else {
         const err = await res.json();
         return err.message;
       }
+      console.log(user);
     }
     if (key) get_user();
     else setUser(null);
